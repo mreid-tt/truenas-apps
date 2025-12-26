@@ -1,6 +1,6 @@
 images:
   seafile:
-    repository: seafileltd/seafile-ce
+    repository: seafileltd/seafile-mc
     tag: 13.0-latest
   container_utils_image:
     repository: ixsystems/container-utils
