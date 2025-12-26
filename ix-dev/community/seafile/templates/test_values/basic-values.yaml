@@ -28,10 +28,14 @@ network:
     port_number: 8082
 
 ix_volumes:
-  seafile-data: /opt/tests/mnt/seafile/data
-  seafile-db: /opt/tests/mnt/seafile/db
-  seafile-caddy: /opt/tests/mnt/seafile/caddy
-  seafile-seadoc: /opt/tests/mnt/seafile/seadoc
+  seafile-data:
+    host_path: /opt/tests/mnt/seafile/data
+  seafile-db:
+    host_path: /opt/tests/mnt/seafile/db
+  seafile-caddy:
+    host_path: /opt/tests/mnt/seafile/caddy
+  seafile-seadoc:
+    host_path: /opt/tests/mnt/seafile/seadoc
 
 storage:
   data:
