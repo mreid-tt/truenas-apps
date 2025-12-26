@@ -53,6 +53,9 @@ storage:
       create_host_path: true
   redis:
     type: temporary
+ci:
+  setup_scripts:
+    - ix-dev/community/seafile/templates/ci/setup-test-dirs.sh
 run_as:
   user: 568
   group: 568
