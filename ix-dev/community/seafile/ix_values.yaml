@@ -1,0 +1,93 @@
+images:
+  seafile:
+    repository: docker.seadrive.org/seafileltd/seafile-mc
+    tag: 13.0-latest
+  mariadb:
+    repository: mariadb
+    tag: "10.11"
+  redis:
+    repository: redis
+    tag: "7"
+  caddy:
+    repository: lucaslorentz/caddy-docker-proxy
+    tag: 2.9-alpine
+  seadoc:
+    repository: seafileltd/sdoc-server
+    tag: 2.0-latest
+
+consts:
+  seafile_container_name: seafile
+  db_container_name: seafile-db
+  redis_container_name: seafile-redis
+  perms_container_name: seafile-perms
+  caddy_container_name: seafile-caddy
+  seadoc_container_name: seafile-seadoc
+  db_user: seafile
+  db_ccnet_db: ccnet_db
+  db_seafile_db: seafile_db
+  db_seahub_db: seahub_db
+  redis_port: 6379
+  seadoc_port: 80
+
+seafile:
+  admin_email: admin@example.com
+  admin_password: null
+  hostname: seafile.example.com
+  protocol: http
+  site_root: /
+  timezone: Etc/UTC
+
+mysql:
+  root_password: null
+  user_password: null
+
+redis:
+  password: null
+
+jwt:
+  private_key: null
+
+services:
+  enable_seadoc: false
+  enable_notification_server: false
+  enable_seafile_ai: false
+  enable_caddy: false
+
+network:
+  web_port:
+    bind_mode: published
+    port_number: 8082
+  certificate_id: null
+  caddy_http_port:
+    bind_mode: published
+    port_number: 80
+  caddy_https_port:
+    bind_mode: published
+    port_number: 443
+
+storage:
+  data:
+    type: ix_volume
+    ix_volume_config:
+      dataset_name: seafile-data
+      acl_enable: false
+  db:
+    type: ix_volume
+    ix_volume_config:
+      dataset_name: seafile-db
+      acl_enable: false
+  caddy:
+    type: ix_volume
+    ix_volume_config:
+      dataset_name: seafile-caddy
+      acl_enable: false
+  seadoc:
+    type: ix_volume
+    ix_volume_config:
+      dataset_name: seafile-seadoc
+      acl_enable: false
+  additional_storage: []
+
+run_as:
+  user: 568
+  group: 568

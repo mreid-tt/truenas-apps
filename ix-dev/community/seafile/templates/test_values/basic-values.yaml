@@ -1,0 +1,54 @@
+seafile:
+  admin_email: admin@example.com
+  admin_password: ChangeMe123!
+  hostname: seafile.local
+  protocol: http
+  site_root: /
+  timezone: Etc/UTC
+
+mysql:
+  root_password: RootPass123!
+  user_password: DbPass123!
+
+redis:
+  password: ""
+
+jwt:
+  private_key: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+
+services:
+  enable_seadoc: false
+  enable_notification_server: false
+  enable_seafile_ai: false
+  enable_caddy: false
+
+network:
+  web_port:
+    bind_mode: published
+    port_number: 8082
+
+storage:
+  data:
+    type: host_path
+    host_path_config:
+      path: /opt/seafile/data
+      acl_enable: false
+  db:
+    type: host_path
+    host_path_config:
+      path: /opt/seafile/db
+      acl_enable: false
+  caddy:
+    type: host_path
+    host_path_config:
+      path: /opt/seafile/caddy
+      acl_enable: false
+  seadoc:
+    type: host_path
+    host_path_config:
+      path: /opt/seafile/seadoc
+      acl_enable: false
+
+run_as:
+  user: 568
+  group: 568

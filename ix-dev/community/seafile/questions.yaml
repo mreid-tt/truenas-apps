@@ -1,0 +1,312 @@
+groups:
+  - name: Seafile
+    description: Configure Seafile
+  - name: Database
+    description: Configure the bundled MariaDB instance
+  - name: Secrets
+    description: Configure JWT and Redis secrets
+  - name: Optional Services
+    description: Enable additional Seafile services
+  - name: Storage
+    description: Configure persistent storage
+  - name: Networking
+    description: Configure networking and TLS
+  - name: Runtime
+    description: Configure runtime user and group IDs
+
+questions:
+  - variable: seafile
+    label: ""
+    group: Seafile
+    schema:
+      type: dict
+      attrs:
+        - variable: admin_email
+          label: Admin Email
+          description: Email used for the initial admin account.
+          schema:
+            type: string
+            default: {{ values.seafile.admin_email | tojson }}
+            required: true
+        - variable: admin_password
+          label: Admin Password
+          description: Password for the initial admin account.
+          schema:
+            type: string
+            default: ""
+            private: true
+            required: true
+        - variable: hostname
+          label: Server Hostname
+          description: Hostname users will use to access Seafile.
+          schema:
+            type: string
+            default: {{ values.seafile.hostname | tojson }}
+            required: true
+        - variable: protocol
+          label: External Protocol
+          schema:
+            type: string
+            default: {{ values.seafile.protocol | tojson }}
+            enum:
+              - value: "http"
+                description: HTTP
+              - value: "https"
+                description: HTTPS
+        - variable: site_root
+          label: Site Root
+          description: URL prefix when served behind another proxy.
+          schema:
+            type: string
+            default: {{ values.seafile.site_root | tojson }}
+        - variable: timezone
+          label: Timezone
+          schema:
+            type: string
+            default: {{ values.seafile.timezone | tojson }}
+            $ref:
+              - definitions/timezone
+
+  - variable: mysql
+    label: ""
+    group: Database
+    schema:
+      type: dict
+      attrs:
+        - variable: root_password
+          label: MariaDB Root Password
+          schema:
+            type: string
+            default: ""
+            private: true
+            required: true
+        - variable: user_password
+          label: Seafile DB User Password
+          schema:
+            type: string
+            default: ""
+            private: true
+            required: true
+
+  - variable: jwt
+    label: ""
+    group: Secrets
+    schema:
+      type: dict
+      attrs:
+        - variable: private_key
+          label: JWT Private Key
+          description: Used by Seafile and SeaDoc for signed tokens.
+          schema:
+            type: string
+            default: ""
+            private: true
+            required: true
+  - variable: redis
+    label: ""
+    group: Secrets
+    schema:
+      type: dict
+      attrs:
+        - variable: password
+          label: Redis Password
+          description: Optional password for Redis cache.
+          schema:
+            type: string
+            default: ""
+            private: true
+
+  - variable: services
+    label: ""
+    group: Optional Services
+    schema:
+      type: dict
+      attrs:
+        - variable: enable_seadoc
+          label: Enable SeaDoc
+          description: Deploy the SeaDoc collaborative editor.
+          schema:
+            type: boolean
+            default: {{ values.services.enable_seadoc | tojson }}
+        - variable: enable_caddy
+          label: Deploy Caddy Reverse Proxy
+          schema:
+            type: boolean
+            default: {{ values.services.enable_caddy | tojson }}
+        - variable: enable_notification_server
+          label: Enable Notification Server
+          schema:
+            type: boolean
+            default: {{ values.services.enable_notification_server | tojson }}
+        - variable: enable_seafile_ai
+          label: Enable Seafile AI
+          schema:
+            type: boolean
+            default: {{ values.services.enable_seafile_ai | tojson }}
+
+  - variable: storage
+    label: ""
+    group: Storage
+    schema:
+      type: dict
+      attrs:
+        - variable: data
+          label: Seafile Data
+          schema:
+            type: dict
+            $ref:
+              - normalize/storage
+            attrs: []
+            additional_attrs: []
+            default: {{ values.storage.data | tojson }}
+            required: true
+        - variable: db
+          label: MariaDB Data
+          schema:
+            type: dict
+            $ref:
+              - normalize/storage
+            attrs: []
+            additional_attrs: []
+            default: {{ values.storage.db | tojson }}
+            required: true
+        - variable: caddy
+          label: Caddy Data
+          schema:
+            type: dict
+            $ref:
+              - normalize/storage
+            attrs: []
+            additional_attrs: []
+            default: {{ values.storage.caddy | tojson }}
+        - variable: seadoc
+          label: SeaDoc Data
+          schema:
+            type: dict
+            $ref:
+              - normalize/storage
+            attrs: []
+            additional_attrs: []
+            default: {{ values.storage.seadoc | tojson }}
+        - variable: additional_storage
+          label: Additional Storage
+          schema:
+            type: list
+            default: []
+            items:
+              - variable: storage
+                label: Storage Entry
+                schema:
+                  type: dict
+                  $ref:
+                    - normalize/storage
+
+  - variable: network
+    label: ""
+    group: Networking
+    schema:
+      type: dict
+      attrs:
+        - variable: web_port
+          label: Web Port
+          schema:
+            type: dict
+            attrs:
+              - variable: bind_mode
+                label: Port Bind Mode
+                schema:
+                  type: string
+                  default: {{ values.network.web_port.bind_mode | tojson }}
+                  enum:
+                    - value: "published"
+                      description: Publish port on the host for external access
+                    - value: "exposed"
+                      description: Expose for inter-container communication
+                    - value: ""
+                      description: None
+              - variable: port_number
+                label: Port Number
+                schema:
+                  type: int
+                  default: {{ values.network.web_port.port_number }}
+                  min: 1
+                  max: 65535
+                  required: true
+        - variable: certificate_id
+          label: TLS Certificate
+          schema:
+            type: int
+            "null": true
+            $ref:
+              - definitions/certificate
+        - variable: caddy_http_port
+          label: Caddy HTTP Port
+          schema:
+            type: dict
+            attrs:
+              - variable: bind_mode
+                label: Port Bind Mode
+                schema:
+                  type: string
+                  default: {{ values.network.caddy_http_port.bind_mode | tojson }}
+                  enum:
+                    - value: "published"
+                      description: Publish port on the host
+                    - value: "exposed"
+                      description: Expose internally
+                    - value: ""
+                      description: None
+              - variable: port_number
+                label: Port Number
+                schema:
+                  type: int
+                  default: {{ values.network.caddy_http_port.port_number }}
+                  min: 1
+                  max: 65535
+                  required: true
+            show_if: [["services.enable_caddy", "=", true]]
+        - variable: caddy_https_port
+          label: Caddy HTTPS Port
+          schema:
+            type: dict
+            attrs:
+              - variable: bind_mode
+                label: Port Bind Mode
+                schema:
+                  type: string
+                  default: {{ values.network.caddy_https_port.bind_mode | tojson }}
+                  enum:
+                    - value: "published"
+                      description: Publish port on the host
+                    - value: "exposed"
+                      description: Expose internally
+                    - value: ""
+                      description: None
+              - variable: port_number
+                label: Port Number
+                schema:
+                  type: int
+                  default: {{ values.network.caddy_https_port.port_number }}
+                  min: 1
+                  max: 65535
+                  required: true
+            show_if: [["services.enable_caddy", "=", true]]
+
+  - variable: run_as
+    label: ""
+    group: Runtime
+    schema:
+      type: dict
+      attrs:
+        - variable: user
+          label: User ID
+          schema:
+            type: int
+            default: {{ values.run_as.user }}
+            required: true
+        - variable: group
+          label: Group ID
+          schema:
+            type: int
+            default: {{ values.run_as.group }}
+            required: true
