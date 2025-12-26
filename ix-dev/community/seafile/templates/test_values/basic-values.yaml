@@ -27,27 +27,37 @@ network:
     bind_mode: published
     port_number: 8082
 
+ix_volumes:
+  seafile-data: /opt/tests/mnt/seafile/data
+  seafile-db: /opt/tests/mnt/seafile/db
+  seafile-caddy: /opt/tests/mnt/seafile/caddy
+  seafile-seadoc: /opt/tests/mnt/seafile/seadoc
+
 storage:
   data:
-    type: host_path
-    host_path_config:
-      path: /opt/seafile/data
+    type: ix_volume
+    ix_volume_config:
+      dataset_name: seafile-data
       acl_enable: false
+      create_host_path: true
   db:
-    type: host_path
-    host_path_config:
-      path: /opt/seafile/db
+    type: ix_volume
+    ix_volume_config:
+      dataset_name: seafile-db
       acl_enable: false
+      create_host_path: true
   caddy:
-    type: host_path
-    host_path_config:
-      path: /opt/seafile/caddy
+    type: ix_volume
+    ix_volume_config:
+      dataset_name: seafile-caddy
       acl_enable: false
+      create_host_path: true
   seadoc:
-    type: host_path
-    host_path_config:
-      path: /opt/seafile/seadoc
+    type: ix_volume
+    ix_volume_config:
+      dataset_name: seafile-seadoc
       acl_enable: false
+      create_host_path: true
 
 run_as:
   user: 568
