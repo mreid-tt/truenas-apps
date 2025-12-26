@@ -30,6 +30,7 @@
 
 {% set seafile = tpl.add_container(values.consts.seafile_container_name, "seafile") %}
 {% do seafile.set_user(values.run_as.user, values.run_as.group) %}
+{% do seafile.healthcheck.set_test("curl", {"port": 80, "path": "/"}) %}
 {% do seafile.depends.add_dependency(values.consts.db_container_name, "service_healthy") %}
 {% do seafile.depends.add_dependency(values.consts.redis_container_name, "service_started") %}
 
@@ -82,6 +83,7 @@
 
 {% if values.services.enable_seadoc %}
   {% set seadoc = tpl.add_container(values.consts.seadoc_container_name, "seadoc") %}
+  {% do seadoc.healthcheck.set_test("curl", {"port": values.consts.seadoc_port, "path": "/"}) %}
   {% do seadoc.depends.add_dependency(values.consts.db_container_name, "service_healthy") %}
   {% do seadoc.environment.add_env("DB_HOST", values.consts.db_container_name) %}
   {% do seadoc.environment.add_env("DB_PORT", 3306) %}
@@ -101,6 +103,7 @@
 {% if values.services.enable_caddy %}
   {% set caddy = tpl.add_container(values.consts.caddy_container_name, "caddy") %}
   {% do caddy.set_user(0, 0) %}
+  {% do caddy.healthcheck.disable() %}
   {% do caddy.environment.add_env("CADDY_INGRESS_NETWORKS", "seafile") %}
   {% do caddy.add_storage("/data", values.storage.caddy) %}
   {% do perm_container.add_or_skip_action("caddy-data", values.storage.caddy, perms_config) %}
