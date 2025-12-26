@@ -22,10 +22,10 @@ network:
     bind_mode: published
     port_number: 8082
 ix_volumes:
-  seafile-data: /opt/tests/mnt/seafile/data
-  seafile-db: /opt/tests/mnt/seafile/db
-  seafile-caddy: /opt/tests/mnt/seafile/caddy
-  seafile-seadoc: /opt/tests/mnt/seafile/seadoc
+  seafile-data: /workspace/truenas-apps/ix-dev/community/seafile/testdata/data
+  seafile-db: /workspace/truenas-apps/ix-dev/community/seafile/testdata/db
+  seafile-caddy: /workspace/truenas-apps/ix-dev/community/seafile/testdata/caddy
+  seafile-seadoc: /workspace/truenas-apps/ix-dev/community/seafile/testdata/seadoc
 storage:
   data:
     type: ix_volume
