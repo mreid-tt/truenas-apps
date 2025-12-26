@@ -5,38 +5,27 @@ seafile:
   protocol: http
   site_root: /
   timezone: Etc/UTC
-
 mysql:
   root_password: RootPass123!
   user_password: DbPass123!
-
 redis:
-  password: ""
-
+  password: ''
 jwt:
   private_key: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
-
 services:
   enable_seadoc: false
   enable_notification_server: false
   enable_seafile_ai: false
   enable_caddy: false
-
 network:
   web_port:
     bind_mode: published
     port_number: 8082
-
 ix_volumes:
-  seafile-data:
-    host_path: /opt/tests/mnt/seafile/data
-  seafile-db:
-    host_path: /opt/tests/mnt/seafile/db
-  seafile-caddy:
-    host_path: /opt/tests/mnt/seafile/caddy
-  seafile-seadoc:
-    host_path: /opt/tests/mnt/seafile/seadoc
-
+  seafile-data: /opt/tests/mnt/seafile/data
+  seafile-db: /opt/tests/mnt/seafile/db
+  seafile-caddy: /opt/tests/mnt/seafile/caddy
+  seafile-seadoc: /opt/tests/mnt/seafile/seadoc
 storage:
   data:
     type: ix_volume
@@ -62,7 +51,6 @@ storage:
       dataset_name: seafile-seadoc
       acl_enable: false
       create_host_path: true
-
 run_as:
   user: 568
   group: 568
