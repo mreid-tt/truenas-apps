@@ -15,8 +15,8 @@ keywords:
   - sync
   - sharing
   - collaboration
-lib_version: 2.1.65
-lib_version_hash: f92a9ee78c78fc77f86e7d8b545bd4c605c31c599e2c5da59f1615aa516cb8b5
+lib_version: 2.1.74
+lib_version_hash: 7ee6d601c170a17717109c91dde4297ae669728a57405cef7f49b8ef931a07d1
 maintainers:
   - name: TrueNAS Community
     email: apps@truenas.com

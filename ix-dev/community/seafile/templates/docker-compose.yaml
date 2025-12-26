@@ -54,9 +54,9 @@
 {% if values.redis.password %}
   {% do seafile.environment.add_env("REDIS_PASSWORD", values.redis.password) %}
 {% endif %}
-{% do seafile.environment.add_env("ENABLE_SEADOC", values.services.enable_seadoc | lower) %}
-{% do seafile.environment.add_env("ENABLE_NOTIFICATION_SERVER", values.services.enable_notification_server | lower) %}
-{% do seafile.environment.add_env("ENABLE_SEAFILE_AI", values.services.enable_seafile_ai | lower) %}
+{% do seafile.environment.add_env("ENABLE_SEADOC", "true" if values.services.enable_seadoc else "false") %}
+{% do seafile.environment.add_env("ENABLE_NOTIFICATION_SERVER", "true" if values.services.enable_notification_server else "false") %}
+{% do seafile.environment.add_env("ENABLE_SEAFILE_AI", "true" if values.services.enable_seafile_ai else "false") %}
 
 {% if values.services.enable_seadoc %}
   {% do seafile.environment.add_env("SEADOC_SERVER_URL", "http://%s" | format(values.consts.seadoc_container_name)) %}
