@@ -18,7 +18,7 @@
 ) %}
 
 {% set redis_cfg = {
-  "password": values.redis.password,
+  "password": values.redis.password or "",
   "volume": {"type": "temporary", "volume_config": {"volume_name": "redis-data"}},
 } %}
 {% set redis = tpl.deps.redis(
