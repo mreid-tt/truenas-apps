@@ -2,6 +2,10 @@
 
 {% set perm_container = tpl.deps.perms(values.consts.perms_container_name) %}
 {% set perms_config = {"uid": values.run_as.user, "gid": values.run_as.group, "mode": "check"} %}
+{#- Seafile's init scripts create directory structure under /shared while
+  still running as root. Keep that mount root-owned so those mkdirs succeed
+  before the container drops privileges to UID/GID 568. -#}
+{% set seafile_data_perms = {"uid": 0, "gid": 0, "mode": "check"} %}
 
 {% set mariadb_config = {
   "user": values.consts.db_user,
@@ -67,7 +71,7 @@
 {% endif %}
 
 {% do seafile.add_storage("/shared", values.storage.data) %}
-{% do perm_container.add_or_skip_action("seafile-data", values.storage.data, perms_config) %}
+{% do perm_container.add_or_skip_action("seafile-data", values.storage.data, seafile_data_perms) %}
 
 {% for store in values.storage.additional_storage %}
   {% do seafile.add_storage(store.mount_path, store) %}
