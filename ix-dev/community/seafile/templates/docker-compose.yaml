@@ -41,7 +41,7 @@
 {#- Seafile's own web UI listens on the configured web_port (default 8082).
   Probe that port rather than hard-coding 80 so the healthcheck stays valid
   even when Caddy is disabled or bound elsewhere. -#}
-{% do seafile.healthcheck.set_test("curl", {"port": values.network.web_port.port_number, "path": "/api2/ping/"}) %}
+{% do seafile.healthcheck.set_test("curl", {"port": values.network.web_port.port_number, "path": "/"}) %}
 {% do seafile.depends.add_dependency(values.consts.db_container_name, "service_healthy") %}
 {% do seafile.depends.add_dependency(values.consts.redis_container_name, "service_started") %}
 

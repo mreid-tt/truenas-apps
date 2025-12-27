@@ -16,7 +16,7 @@ services:
   enable_seadoc: false
   enable_notification_server: false
   enable_seafile_ai: false
-  enable_caddy: false
+  enable_caddy: true
 network:
   web_port:
     bind_mode: published
